@@ -1,8 +1,8 @@
-Template.hello.greeting = function () {
-  return "Welcome to mosaiq.";
+Template.header.bannerURL = function () {
+	return "assets/MOSAIQME.jpg";
 };
 
-Template.hello.events({
+Template.header.events({
   'click input' : function () {
     // template data, if any, is available in 'this'
     if (typeof console !== 'undefined')
