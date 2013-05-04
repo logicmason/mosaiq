@@ -4,20 +4,35 @@
 	src: url('../assets/bank_gothic_light.ttf');
 }
 
+body {
+	#background: #888;
+}
+
 .banner {
 	display: block;
-	margin: 200px auto 40px auto;
+	margin: 200px auto 80px auto;
 	width: 1000px;
 }
 
 .greeting {
-    font: 30px/60px bankGothicLight;
-    color: white;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    border-radius: 10px;
-    width: 550px;
-    background: rgb(64, 64, 128);
-    background: rgba(64, 64, 128, .8);
+  font: 30px/60px bankGothicLight;
+  color: white;
+  margin: 0 auto 0;
+  text-align: center;
+  border-radius: 10px;
+  width: 550px;
+	padding-top: 1px;
+  background: rgb(64, 64, 128);
+	opacity: 0.8;
+}
+
+.greeting:hover {
+	opacity: 0.9;
+}
+
+.greeting:active {
+	opacity: 1;
+	height: 58px;
+	margin-top: 1px;
+	padding-top: 3px;
 }

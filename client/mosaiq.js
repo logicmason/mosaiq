@@ -2,10 +2,11 @@ Template.header.bannerURL = function () {
 	return "assets/MOSAIQME.jpg";
 };
 
-Template.header.events({
-  'click input' : function () {
+Template.greeting.events({
+  'click .greeting' : function () {
     // template data, if any, is available in 'this'
-    if (typeof console !== 'undefined')
-      console.log("You pressed the button");
+    if (typeof console !== 'undefined') {
+      alert("Are you afraid?");
+    }
   }
 });
