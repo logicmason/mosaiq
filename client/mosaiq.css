@@ -1,1 +1,7 @@
 /* CSS declarations go here */
+@font-face {
+	font-family: bank_gothic_light;
+	src: url('./assets/bank_gothic_light.ttf');
+}
+
+h1 { font-family: bank_gothic_light; }
