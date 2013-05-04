@@ -1,5 +1,5 @@
-Template.header.bannerURL = function () {
-	return "assets/MOSAIQME.jpg";
+Template.header.thing1 = function () {
+	return "thing one";
 };
 
 Template.greeting.events({

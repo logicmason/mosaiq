@@ -5,13 +5,18 @@
 }
 
 body {
-	#background: #888;
+	background: #fff;
 }
 
 .banner {
 	display: block;
 	margin: 200px auto 80px auto;
-	width: 1000px;
+	width: 950px;
+	padding: 25px;
+	border-radius: 10px;
+	text-align: center;
+	/*background: rgb(64, 64, 128);*/
+	opacity: 0.9;
 }
 
 .greeting {
