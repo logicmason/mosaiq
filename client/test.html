@@ -1,0 +1,60 @@
+<html>
+<head>
+<script src="processing-1.3.6.min.js"></script>
+</head>
+<body>
+<script>
+
+var generatePortrait = function(image, collection) {
+  var imageCount = 777,
+      pixelSize = 10,
+      width = 0,
+      height = 0,
+      curHue, 
+      curSquare, 
+      chosenImage,
+      curBrightness;
+
+  processing.image(image, 0, 0);
+
+  for (var x = 0; x < height; x+=pixelSize) {
+    for (var y = 0; y < width; y+=pixelSize) {
+      curSquare = processing.get(x, y, pixelSize, pixelSize); 
+      curHue = processing.averageColor(curSquare);
+      curBrightness = processing.averageBrightness(curSquare);
+      chosenImage = processing.getClosestImage(curHue);
+      processing.image(chosenImage, x, y, pixelSize, pixelSize);
+    };
+  }; 
+
+  processing.save(image);
+};
+
+var getClosestImage = function(hue) {
+  var getClosestDistance = function(curHue, distance) {
+    var distance = 0 || distance, 
+    image, imageBack, imageForward;
+
+    if (collection[curHue]) {
+      return distance;
+    } else {
+        if (distance <= 0) hueBack = getClosestDistance(curHue-1, distance-1);          
+        if (distance >= 0) hueForward = getClosestDistance(curHue+1, distance+1);
+      if (Math.abs(hueBack) > Math.abs(hueForward)) {
+        return hueForward;
+      } else if (Math.abs(hueForward) > Math.abs(hueBack)) {
+        return hueBackward; 
+      } else { 
+        return hueForward;
+      }
+    }
+  }
+  
+  return collection[getClosestDistance(hue) + hue][0];
+};
+
+</script>
+
+
+</body>
+</html>
