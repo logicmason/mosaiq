@@ -3,16 +3,19 @@ Template.header.thing1 = function () {
 };
 
 Template.greeting.events({
-  'click .greeting' : function () {
-    // template data, if any, is available in 'this'
-    var mypic = new Image();
-		mypic.src = 'pic.jpg';
-		var canvas = $('<canvas>');
-		var ctx = canvas[0].getContext('2d');
-		ctx.drawImage(mypic, 0, 0);
-		data = ctx.getImageData(0,0,50,50).data;
-		console.log(data);
-    console.log(calcAverageHue(data));
+  // 'click .greeting' : function () {
+  //   // template data, if any, is available in 'this'
+  //   var mypic = new Image();
+		// mypic.src = 'pic.jpg';
+		// var canvas = $('<canvas>');
+		// var ctx = canvas[0].getContext('2d');
+		// ctx.drawImage(mypic, 0, 0);
+		// data = ctx.getImageData(0,0,50,50).data;
+		// console.log(data);
+  //   console.log(calcAverageHue(data));
+  // }
+  'click. greeting' : function () {
+    
   }
 });
 
@@ -33,8 +36,59 @@ var hueToXY = function (value) {
   return [x, y];
 };
 
-var convertToPolar = function () {
+var imageLibrary = {};
+var imageLibrary.hash = {};
+var imageLibrary.index = [];
+var imageLibrary.numImages = function () {
+  return imageLibrary.index.length;
+};
 
+var buildImageHueList = function (images) {
+  var hue;
+  var imageData;
+  for (var i = 0; i < 360; i++) {
+    imageLibrary.index.push([]);
+  }
+  for (var j = 0, l = images.length; j < l; j++) {
+    imageData = getImageArray(images[j]);
+    hues = calcAverageHue(imageData);
+    while (hues in imageLibrary.hash) {
+      hues += 0.0001;
+    }
+    imageLibrary.index.push(hues);
+    imageLibrary.hash[hues] = images[j];
+  }
+  imageLibrary.index.sort();
+};
+
+var findBestPic = function (hue) {
+  var counter = 0;
+  var afterIndex;
+  var beforeIndex;
+
+  // check the index for the closest match to this hue
+  while (imageLibrary.index[counter] && imageLibrary.index[counter] < hue) {
+    counter++;
+  }
+
+  if (counter === 0) {
+    afterIndex = 0;
+    beforeIndex = imageLibrary.numImages() - 1;
+  } else if (counter === imageLibrary.numImages()) {
+    afterIndex = 0;
+    beforeIndex = imageLibrary.numImages() - 1;
+  } else {
+    afterIndex = counter;
+    beforeIndex = counter - 1;
+  }
+
+  var after = imageLibrary.index[afterIndex] - hue;
+  var before = hue - imageLibrary.index[beforeIndex];
+  if (after < before) {
+    return imageLibrary.hash[imageLibrary.index[afterIndex]];
+  } else {
+    return imageLibrary.hash[imageLibrary.index[beforeIndex]];
+  }
 };
 
 var calcAverageHue = function (array) {
