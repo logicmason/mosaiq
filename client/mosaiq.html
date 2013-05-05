@@ -7,7 +7,9 @@
 </body>
 
 <template name="header">
-	<img class="logo banner" src="logo_black.svg">
+	<img class="logo banner"
+		{{#if loggedIn}}style="margin-top: 0"{{/if}}
+	src="logo_black.svg">
 	{{#unless loggedIn}}
 		{{> greeting}}
 	{{/unless}}

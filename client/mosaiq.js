@@ -21,11 +21,10 @@ if (parseQueryString().code) {
   });
 }
 
-Template.header.loggedIn = function () {
+Template.header.loggedIn = function() {
   var user = Session.get('singly_account');
   return !!user;
 };
-
 
 Template.greeting.events({
   // 'click .greeting' : function () {
