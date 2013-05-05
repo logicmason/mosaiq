@@ -11,19 +11,19 @@ var parseQueryString = function() {
 	return qs;
 };
 
-if (parseQueryString().code) {
-  Meteor.call('authenticate', parseQueryString(), function(err, res) {
-    var stash = [];
-    Session.set('singly_account', res['access_token']);
-    Session.set('singly_token', res['account']);
-    Meteor.call('getFBPics', res['access_token'], function(err, res) {
-      // Array.push.apply(stash, res);
-      Session.set('picStash', res);
-    });
-  });
-}
+if (parseQueryString().code && !Session.get('picStash')) {
+	Meteor.call('authenticate', parseQueryString(), function(err, res) {
+		Session.set('singly_account', res['access_token']);
+		Session.set('singly_token', res['account']);
+		Meteor.call('getFBPics', res['access_token'], function(err, res) {
+			Session.set('userFullName', res[0]);
+      Session.set('userProfilePicURL', res[1]);
+      Session.set('picStash', res[2]);
+		});
+	});
+};
 
-var makeCrappyMosaic = function (imgSrcArray) {
+var makeNotTooShabbyMosaic = function (imgSrcArray) {
   var $mosaic = $('.mosaic');
   var $img;
   for (var i = 0, l = imgSrcArray.length; i < l; i++) {
@@ -34,7 +34,7 @@ var makeCrappyMosaic = function (imgSrcArray) {
 
 Template.mosaic.profilePic = function () {
   var pic = {};
-  pic.src = '1.jpg';
+  pic.src = Session.get('userProfilePicURL');
   pic.style = 'width:800px; height:800px; left:0; top:0;';
   pic.style += 'position:absolute;';
   pic.style += 'z-index:1;';
@@ -81,15 +81,17 @@ Template.mosaic.tiles = function () {
 
 Template.mosaic.picStash = function () {
   if (Session.get('picStash') && Session.get('picStash')[0]) {
-    makeCrappyMosaic(Session.get('picStash'));
+    makeNotTooShabbyMosaic(Session.get('picStash'));
     return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
   }
-  return 'hello';
+};
+
+Template.main.loggedIn = function() {
+  return !!Session.get('singly_account');
 };
 
 Template.header.loggedIn = function() {
-  var user = Session.get('singly_account');
-  return !!user;
+  return !!Session.get('singly_account');
 };
 
 Template.greeting.events({
