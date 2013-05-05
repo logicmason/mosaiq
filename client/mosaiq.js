@@ -106,7 +106,7 @@ Template.greeting.events({
 		// console.log(data);
   //   console.log(calcAverageHue(data));
   // }
-  'click. greeting' : function () {
+  'click greeting' : function () {
 
   }
 });
