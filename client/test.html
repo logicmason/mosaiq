@@ -35,9 +35,9 @@ var generatePortrait = function(image, collection) {
     for (var x = 0; x < curSquare.height; x++) {
       for (var y = 0; y < curSquare.width; y++) {
         index = (y * canvasWidth + x) * 4;
-        red += curSquare[index]
+        red   += curSquare[index]
         green += curSquare[index]++
-        blue += curSquare[index]++
+        blue  += curSquare[index]++
         count++;
       }
     }
