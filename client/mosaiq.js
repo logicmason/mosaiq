@@ -12,7 +12,6 @@ var parseQueryString = function() {
 };
 
 if (parseQueryString().code) {
-<<<<<<< HEAD
 	Meteor.call('authenticate', parseQueryString(), function(err, res) {
 		Session.set('singly_account', res['access_token']);
 		Session.set('singly_token', res['account']);

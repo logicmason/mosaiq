@@ -29,11 +29,19 @@ Meteor.methods({
 			},
 			query: "full=true"
 		});
+
 		console.log("Singly Sends Pics: ", result);
 		if (result.statusCode === 200) {
-			return _(result.data).map(function(friend) {
+			var imgBlobs = [];
+			var imgURLs = _(result.data).map(function(friend) {
 				return friend.full.facebook.data.picture.data.url;
 			});
+			_(imgURLs).each(function(url) {
+				console.log("getting image...");
+
+				console.log(imgBlobs.length, imgBlobs);
+			});
+			return imgBlobs;
 		}
 	}
 });
