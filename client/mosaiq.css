@@ -57,13 +57,13 @@ a {
 	text-decoration: none;
 }
 
-.login:hover {
+.login .button:hover {
 	opacity: 0.9;
 }
 
-.login:active {
+.login .button:active {
 	opacity: 1;
-	height: 58px;
+	height: 36px;
 	margin-top: 1px;
 	padding-top: 3px;
 }
