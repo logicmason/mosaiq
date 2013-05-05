@@ -84,7 +84,10 @@ Template.mosaic.picStash = function () {
     makeNotTooShabbyMosaic(Session.get('picStash'));
     return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
   }
-  return 'hello';
+};
+
+Template.main.loggedIn = function() {
+  return !!Session.get('singly_account');
 };
 
 Template.header.loggedIn = function() {
