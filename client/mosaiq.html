@@ -36,8 +36,18 @@
   <img src="{{ src }}" style="{{ style }}">
 </template>
 
-<template class="login" name="greeting">
-	<a href="https://api.singly.com/oauth/authenticate?client_id=41a209b08b207c9c34f64e1332629e55&redirect_uri=http%3A%2F%2Flocalhost:3000%2F&service=facebook"><div class="login">
-		log in with facebook
-	</div></a>
+<template name="greeting">
+	<div class="login">
+		<a href="https://api.singly.com/oauth/authenticate?client_id=41a209b08b207c9c34f64e1332629e55&redirect_uri=http%3A%2F%2Flocalhost:3000%2F&service=facebook">
+			<div class="button">
+				log in with facebook
+			</div>
+			<div class="button">
+				log in with linkedIn
+			</div>
+			<div class="button">
+				log in with twitter
+			</div>
+		</a>
+	</div>
 </template>
