@@ -34,7 +34,7 @@ var averageHue = function(curSquare) {
   count, red, blue, green;
   for (var x = 0; x < curSquare.height; x++) {
     for (var y = 0; y < curSquare.width; y++) {
-      index = (y * canvasWidth + x) * 4;
+      index = (y * curSquare.width + x) * 4;
       red   += curSquare[index]
       green += curSquare[index]++
       blue  += curSquare[index]++
