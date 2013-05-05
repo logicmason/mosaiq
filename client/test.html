@@ -5,7 +5,12 @@
 <body>
 <script>
 
-//Assumes a PImage
+
+var canvas = document.getElementById("canvas"),
+    context = canvas.getContext("2d");
+
+// Assumes a blob or url as input, a collection in which keys are hues, 
+// and values are arrays of images to load.
 var generatePortrait = function(image, collection) {
   var imageCount = 777,
       pixelSize = 10,
@@ -16,20 +21,28 @@ var generatePortrait = function(image, collection) {
       chosenImage,
       curBrightness;
 
-  processing.image(image, 0, 0);
+  canvas.toDataURL(image);
 
   for (var x = 0; x < height; x+=pixelSize) {
     for (var y = 0; y < width; y+=pixelSize) {
-      curSquare = processing.get(x, y, pixelSize, pixelSize); 
-      curHue = processing.averageColor(curSquare);
-      curBrightness = processing.averageBrightness(curSquare);
-      chosenImage = processing.getClosestImage(curHue);
-      processing.image(chosenImage, x, y, pixelSize, pixelSize);
+      curSquare = context.getImageData(x, y, pixelSize, pixelSize); 
+      curHue = averageColor(curSquare);
+      curBrightness = averageBrightness(curSquare);
+      chosenImage = getClosestImage(curHue);
+      image(chosenImage, x, y, pixelSize, pixelSize);
     };
   }; 
 
-  processing.save(image);
+  var averageColor = function(curSquare) {
+    
+    
+  };
+  var averageBrightness = function(curSquare) {};
 };
+
+// Walks across the hue field and finds any stack.
+// At present, only grabs the top image of an array.
+// Should probably grab a random one.
 
 var getClosestImage = function(hue) {
   var getClosestDistance = function(curHue, distance) {
