@@ -1,3 +1,14 @@
+Meteor.Router.add({
+	'/': function() {
+		if (this.params.code) {
+			Meteor.Methods.call('authenticate', {code: this.params.code}, function(err, res) {
+				console.log(Session.get('singly_token'));
+				console.log(Session.get('singly_account'));
+			});
+		}
+	}
+});
+
 Template.header.thing1 = function () {
 	return "thing one";
 };
