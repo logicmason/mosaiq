@@ -11,19 +11,84 @@ var parseQueryString = function() {
 	return qs;
 };
 
-if (parseQueryString().code) {
+if (parseQueryString().code && !Session.get('picStash')) {
 	Meteor.call('authenticate', parseQueryString(), function(err, res) {
 		Session.set('singly_account', res['access_token']);
 		Session.set('singly_token', res['account']);
 		Meteor.call('getFBPics', res['access_token'], function(err, res) {
-			Session.set('picStash', res);
+			Session.set('userFullName', res[0]);
+      Session.set('userProfilePicURL', res[1]);
+      Session.set('picStash', res[2]);
 		});
-	});	
+	});
+};
+
+var makeNotTooShabbyMosaic = function (imgSrcArray) {
+  var $mosaic = $('.mosaic');
+  var $img;
+  for (var i = 0, l = imgSrcArray.length; i < l; i++) {
+    $img = $('<img>').attr('src', imgSrcArray[i]);
+    $mosaic.append($img);
+  }
+};
+
+Template.mosaic.profilePic = function () {
+  var pic = {};
+  pic.src = Session.get('userProfilePicURL');
+  pic.style = 'width:800px; height:800px; left:0; top:0;';
+  pic.style += 'position:absolute;';
+  pic.style += 'z-index:1;';
+
+  // $img = $('<img>').attr('src', );
+  // $img.css(style);
+  return pic;
+};
+
+Template.mosaic.tiles = function () {
+  var output = [];
+  var friends = [], numFriends;
+  var unitSizePx = 16;
+  var dimension = 50;
+  var row, column, top, left;
+  var style = '', index = 0;
+
+  if (Session.get('picStash')) {
+    for (var i = 0, l = Math.pow(dimension, 2); i < l; i++) {
+      if(friends.length === 0) {
+        friends = Session.get('picStash').slice(0);
+      }
+      numFriends = friends.length;
+      row = Math.floor(i / dimension);
+      column = i - dimension * row;
+      top = row * unitSizePx;
+      left = column * unitSizePx;
+      style = '';
+      style += 'position:absolute;';
+      style += 'z-index:2;';
+      style += 'opacity:0.3;';
+      style += 'width:' + unitSizePx + 'px;';
+      style += 'height:' + unitSizePx + 'px;';
+      style += 'top:' + top + 'px;';
+      style += 'left:' + left + 'px;';
+      index = Math.floor(Math.random() * numFriends);
+      output.push({src:friends.splice(index, 1), style:style});
+    }
+    // return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
+    return output;
+  }
+  return [];
+};
+
+Template.mosaic.picStash = function () {
+  if (Session.get('picStash') && Session.get('picStash')[0]) {
+    makeNotTooShabbyMosaic(Session.get('picStash'));
+    return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
+  }
+  return 'hello';
 };
 
 Template.header.loggedIn = function() {
-  var user = Session.get('singly_account');
-  return !!user;
+  return !!Session.get('singly_account');
 };
 
 Template.greeting.events({
@@ -43,8 +108,36 @@ Template.greeting.events({
   }
 });
 
+// window.initTestData = function () {
+//   var srcList = [];
+//   for (var i = 1; i <= 24; i++) {
+//     srcList.push('testdata/' + i + '.jpg');
+//   }
+//   buildImageHueList(srcList);
+//   console.log(imageLibrary);
+// };
+
+// var makeMosaic = function () {
+//   var tim = getImageArray('testdata/tim.jpg');
+//   var timPixels = pixelize(tim);
+//   var width = 160;
+//   var height = 160;
+//   var hsv;
+//   var thumbSrc;
+
+//   for (var i = 0; i < width; i++) {
+//     for (var j = 0; j < height; j++) {
+//       hsv = rgb2hsv(timPixels[i * width + j].red
+//             , timPixels[i * width + j].green
+//             , timPixels[i * width + j].blue);
+//       thumbSrc = findBestPic(hsv.h);
+
+//     }
+//   }
+// };
+
 // breaks main pic data into hues
-Template.greeting.processMainPic = function(data) {
+window.processMainPic = function(data) {
 	return pixelize(data).map(function(px) {
 		return rgb2hsv(px.red, px.green, px.blue);
 	});
@@ -86,14 +179,14 @@ var hueToXY = function (value) {
   return [x, y];
 };
 
-var imageLibrary = {};
+window.imageLibrary = {};
 	imageLibrary.hash = {};
 	imageLibrary.index = [];
 	imageLibrary.numImages = function () {
   return imageLibrary.index.length;
 };
 
-var buildImageHueList = function (images) {
+window.buildImageHueList = function (images) {
   var hue;
   var imageData;
   for (var i = 0; i < 360; i++) {

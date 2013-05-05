@@ -23,25 +23,23 @@ Meteor.methods({
 	getFBPics: function(token) {
 		this.unblock();
 		console.log("Asking for pics from Singly");
-		var result = Meteor.http.get("https://api.singly.com/friends/facebook", {
+
+		var fbResponse = Meteor.http.get("https://api.singly.com/proxy/facebook/me", {
 			params: {
 				'access_token': token
 			},
-			query: "full=true"
+			query: "fields=name,picture.type(large),friends.fields(picture.type(square))"
 		});
-
-		console.log("Singly Sends Pics: ", result);
-		if (result.statusCode === 200) {
-			var imgBlobs = [];
-			var imgURLs = _(result.data).map(function(friend) {
-				return friend.full.facebook.data.picture.data.url;
-			});
-			_(imgURLs).each(function(url) {
-				console.log("getting image...");
-
-				console.log(imgBlobs.length, imgBlobs);
-			});
-			return imgBlobs;
-		}
+		if (fbResponse.statusCode === 200) {
+			// console.log("Singly Sends fB Data for: %d \n Main Image URL: %d \n and %d thumbs", 
+			// 	fbResponse.data.name, fbResponse.data.picture.data.url, fbResponse.data.friends.data.length);
+			return [
+				fbResponse.data.name, 
+				fbResponse.data.picture.data.url, 
+				fbResponse.data.friends.data.map(function(friend) {
+					return friend.picture.data.url;
+				})
+			];
+		} else console.log('Singly/Facebook (or more likely RP) fucked up: %d', fbResponse);
 	}
 });
