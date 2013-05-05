@@ -41,5 +41,40 @@ Meteor.methods({
 				})
 			];
 		} else console.log('Singly/Facebook (or more likely RP) fucked up: %d', fbResponse);
+	},
+	getProfileImg: function(token) {
+		this.unblock();
+		console.log("Asking for pics from Singly");
+
+		var singlyResponse = Meteor.http.get("https://api.singly.com/profile", {
+			params: {
+				'access_token': token
+			},
+		});
+		if (singlyResponse.statusCode === 200) {
+			// console.log("Singly Sends fB Data for: %d \n Main Image URL: %d \n and %d thumbs", 
+			// 	fbResponse.data.name, fbResponse.data.picture.data.url, fbResponse.data.friends.data.length);
+			return singlyResponse.data.thumbnail_url;
+		} else console.log('Singly (or more likely RP) fucked up: %d', singlyResponse);
+	},
+	getSinglyPics: function(token) {
+		this.unblock();
+		console.log("Asking for pics from Singly");
+
+		var singlyResponse = Meteor.http.get("https://api.singly.com/friends/all", {
+			params: {
+				'access_token': token,
+				'limit': 2500,
+				'full': false,
+				'sort': 'interactions' 
+			},
+		});
+		if (singlyResponse.statusCode === 200) {
+			// console.log("Singly Sends fB Data for: %d \n Main Image URL: %d \n and %d thumbs", 
+			// 	fbResponse.data.name, fbResponse.data.picture.data.url, fbResponse.data.friends.data.length);
+			return singlyResponse.data.map(function(friend) {
+					return friend.thumbnail_url;
+			});
+		} else console.log('Singly (or more likely RP) fucked up: %d', singlyResponse);
 	}
 });
