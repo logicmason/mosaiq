@@ -7,12 +7,16 @@
 </body>
 
 <template name="header">
-	<img class="logo banner" src="logo_black.svg">
-	{{> greeting}}
+	<img class="logo banner"
+		{{#if loggedIn}}style="margin-top: 0"{{/if}}
+	src="logo_black.svg">
+	{{#unless loggedIn}}
+		{{> greeting}}
+	{{/unless}}
 </template>
 
 <template name="greeting">
-	<div class="greeting">
+	<a href="https://api.singly.com/oauth/authenticate?client_id=41a209b08b207c9c34f64e1332629e55&redirect_uri=http%3A%2F%2Fmosaiq.meteor.com%2F&service=facebook"><div class="greeting">
 		You are the sum of your friends.
-	</div>
+	</div></a>
 </template>

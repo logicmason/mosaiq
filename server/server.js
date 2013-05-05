@@ -11,7 +11,7 @@ Meteor.methods({
 		var result = Meteor.http.post("https://api.singly.com/oauth/access_token", {
 			params: {
 				'client_id': "41a209b08b207c9c34f64e1332629e55",
-				'client_secret': "6d8e13ee9eafa2a8761aee09f127ea0c", 
+				'client_secret': "6d8e13ee9eafa2a8761aee09f127ea0c",
 				code: param.code
 			}
 		});
