@@ -44,7 +44,7 @@ Template.greeting.events({
 });
 
 // breaks main pic data into hues
-Template.greeting.processMainPic = function(data) {
+window.processMainPic = function(data) {
 	return pixelize(data).map(function(px) {
 		return rgb2hsv(px.red, px.green, px.blue);
 	});
@@ -86,14 +86,14 @@ var hueToXY = function (value) {
   return [x, y];
 };
 
-var imageLibrary = {};
+window.imageLibrary = {};
 	imageLibrary.hash = {};
 	imageLibrary.index = [];
 	imageLibrary.numImages = function () {
   return imageLibrary.index.length;
 };
 
-var buildImageHueList = function (images) {
+window.buildImageHueList = function (images) {
   var hue;
   var imageData;
   for (var i = 0; i < 360; i++) {
