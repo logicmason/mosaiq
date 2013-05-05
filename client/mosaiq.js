@@ -19,6 +19,28 @@ Template.greeting.events({
   }
 });
 
+// breaks main pic data into hues
+Template.greeting.processMainPic = function(data) {
+	return pixelize(data).map(function(px) {
+		return rgb2hsv(px.red, px.green, px.blue);
+	});
+};
+
+window.pixelize = function (data) {
+	var len = data.length;
+	if (len % 4 !== 0) throw ("invalid data, cannot pixelize");
+	var pixels = [];
+	for (var i = 0; i < data.length; i += 4) {
+		pixels.push({
+			red: data[i],
+			green: data[i+1],
+			blue: data[i+2],
+			alpha: data[i+3]
+		});
+	}
+	return pixels;
+};
+
 var getImageArray = function (src) {
   var canvas = $('<canvas>');
   var ctx = canvas[0].getContext('2d');
@@ -119,11 +141,11 @@ var calcAverageHue = function (array) {
   return averageHue;
 };
 
-var rgb2hsv = function (r,g,b) {
+window.rgb2hsv = function (red, green, blue) {
   var rr, gg, bb,
-      r = arguments[0] / 255,
-      g = arguments[1] / 255,
-      b = arguments[2] / 255,
+      r = red / 255,
+      g = green / 255,
+      b = blue / 255,
       h, s,
       v = Math.max(r, g, b),
       diff = v - Math.min(r, g, b),
