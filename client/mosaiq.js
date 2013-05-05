@@ -1,27 +1,31 @@
 var parseQueryString = function() {
 	var oneParam, k, v, qs = {};
 	_(window.location
-			.search
-			.replace("?", "")
-			.split("&"))
-			.each(function(param) {
-				oneParam = param.split("=");
-				qs[oneParam[0]] = oneParam[1];
+		.search
+		.replace("?", "")
+		.split("&"))
+		.each(function(param) {
+			oneParam = param.split("=");
+			qs[oneParam[0]] = oneParam[1];
 	});
 	return qs;
 };
 
-Meteor.call('authenticate', parseQueryString(), function(err, res) {
-	Session.set('singly_account', res['access_token']);
-	Session.set('singly_token', res['account']);
-	Meteor.call('getFBPics', res['access_token'], function(err, res) {
-		Session.set('picStash', res);
-	});
-});
+if (parseQueryString().code) {
+  Meteor.call('authenticate', parseQueryString(), function(err, res) {
+    Session.set('singly_account', res['access_token']);
+    Session.set('singly_token', res['account']);
+    Meteor.call('getFBPics', res['access_token'], function(err, res) {
+      Session.set('picStash', res);
+    });
+  });
+}
 
-Template.header.thing1 = function () {
-	return "thing one";
+Template.header.loggedIn = function () {
+  var user = Session.get('singly_account');
+  return !!user;
 };
+
 
 Template.greeting.events({
   // 'click .greeting' : function () {
@@ -36,7 +40,7 @@ Template.greeting.events({
   //   console.log(calcAverageHue(data));
   // }
   'click. greeting' : function () {
-    
+
   }
 });
 
@@ -45,6 +49,10 @@ Template.greeting.processMainPic = function(data) {
 	return pixelize(data).map(function(px) {
 		return rgb2hsv(px.red, px.green, px.blue);
 	});
+};
+
+var animateBanner = function() {
+	$('.banner').css('margin-top', 0);
 };
 
 window.pixelize = function (data) {
@@ -74,15 +82,15 @@ var getImageArray = function (src) {
 
 var hueToXY = function (value) {
   value = value * Math.PI / 180;
-  var x = Math.cos(value);
-  var y = Math.sin(value);
+  x = Math.cos(value);
+  y = Math.sin(value);
   return [x, y];
 };
 
 var imageLibrary = {};
-var imageLibrary.hash = {};
-var imageLibrary.index = [];
-var imageLibrary.numImages = function () {
+	imageLibrary.hash = {};
+	imageLibrary.index = [];
+	imageLibrary.numImages = function () {
   return imageLibrary.index.length;
 };
 
