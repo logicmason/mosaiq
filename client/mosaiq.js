@@ -13,8 +13,8 @@ var parseQueryString = function() {
 
 if (parseQueryString().code && !Session.get('picStash')) {
 	Meteor.call('authenticate', parseQueryString(), function(err, res) {
-		Session.set('singly_account', res['access_token']);
-		Session.set('singly_token', res['account']);
+		Session.set('singly_account', res['account']);
+		Session.set('singly_token', res['access_token']);
     Meteor.call('getProfileImg', res['access_token'], function(err, res) {
       Session.set('userProfilePicURL', res);
     });

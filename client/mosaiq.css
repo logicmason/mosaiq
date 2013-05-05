@@ -8,9 +8,15 @@ body {
 	background: #fff;
 }
 
+.tweet-button {
+  right: 10px;
+  top: 10px;
+  position: absolute;
+}
+
 .banner {
 	display: block;
-	margin: 200px auto 0 auto;
+	margin: 50px auto 25px auto;
 	width: 950px;
 	padding: 25px;
 	border-radius: 10px;
