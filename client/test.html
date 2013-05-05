@@ -26,18 +26,18 @@ var generatePortrait = function(image, collection) {
   for (var x = 0; x < height; x+=pixelSize) {
     for (var y = 0; y < width; y+=pixelSize) {
       curSquare = context.getImageData(x, y, pixelSize, pixelSize); 
-      curHue = averageColor(curSquare);
-      curBrightness = averageBrightness(curSquare);
+      curHue = averageHue(curSquare);
       chosenImage = getClosestImage(curHue);
-      image(chosenImage, x, y, pixelSize, pixelSize);
+      context.putImageData(chosenImage, x, y);
     };
   }; 
 
-  var averageColor = function(curSquare) {
-    
-    
+  var averageHue = function(curSquare) {
+    //Just find the average Hue.
+    //Go through every pixel in the curSquare
+    //+= Hue, divide by total.
+    //Will work for now
   };
-  var averageBrightness = function(curSquare) {};
 };
 
 // Walks across the hue field and finds any stack.
