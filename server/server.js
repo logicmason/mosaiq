@@ -4,21 +4,36 @@ Meteor.startup(function () {
 
 Meteor.methods({
 	authenticate: function(param) {
+		console.log("Arrived at Meteor.methods.authenticate with", param);
 		//Meteor Client release
 		this.unblock();
-
 		//Client call to Singly to get Auth code w/o Secret
-		Meteor.http.post("http://api.singly.com/oauth/access_token", {
+		var result = Meteor.http.post("https://api.singly.com/oauth/access_token", {
 			params: {
-				client_id: "41a209b08b207c9c34f64e1332629e55"
-				client_secret: "6d8e13ee9eafa2a8761aee09f127ea0c", 
+				'client_id': "41a209b08b207c9c34f64e1332629e55",
+				'client_secret': "6d8e13ee9eafa2a8761aee09f127ea0c", 
 				code: param.code
 			}
-		}, function(err, res) {
-			if (res.statusCode === 200) {
-				Session.set('singly_token', res.access_token);
-				Session.set('singly_account', res.account);
-			}
 		});
+		console.log("Heard back from Singly", result.data);
+		if (result.statusCode === 200) {
+			return result.data;
+		}
+	},
+	getFBPics: function(token) {
+		this.unblock();
+		console.log("Asking for pics from Singly");
+		var result = Meteor.http.get("https://api.singly.com/friends/facebook", {
+			params: {
+				'access_token': token
+			},
+			query: "full=true"
+		});
+		console.log("Singly Sends Pics: ", result);
+		if (result.statusCode === 200) {
+			return _(result.data).map(function(friend) {
+				return friend.full.facebook.data.picture.data.url;
+			});
+		}
 	}
 });
