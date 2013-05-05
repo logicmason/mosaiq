@@ -13,13 +13,79 @@ var parseQueryString = function() {
 
 if (parseQueryString().code) {
   Meteor.call('authenticate', parseQueryString(), function(err, res) {
+    var stash = [];
     Session.set('singly_account', res['access_token']);
     Session.set('singly_token', res['account']);
     Meteor.call('getFBPics', res['access_token'], function(err, res) {
+      // Array.push.apply(stash, res);
       Session.set('picStash', res);
     });
   });
 }
+
+var makeCrappyMosaic = function (imgSrcArray) {
+  var $mosaic = $('.mosaic');
+  var $img;
+  for (var i = 0, l = imgSrcArray.length; i < l; i++) {
+    $img = $('<img>').attr('src', imgSrcArray[i]);
+    $mosaic.append($img);
+  }
+};
+
+Template.mosaic.profilePic = function () {
+  var pic = {};
+  pic.src = '1.jpg';
+  pic.style = 'width:800px; height:800px; left:0; top:0;';
+  pic.style += 'position:absolute;';
+  pic.style += 'z-index:1;';
+
+  // $img = $('<img>').attr('src', );
+  // $img.css(style);
+  return pic;
+};
+
+Template.mosaic.tiles = function () {
+  var output = [];
+  var friends = [], numFriends;
+  var unitSizePx = 16;
+  var dimension = 50;
+  var row, column, top, left;
+  var style = '', index = 0;
+
+  if (Session.get('picStash')) {
+    for (var i = 0, l = Math.pow(dimension, 2); i < l; i++) {
+      if(friends.length === 0) {
+        friends = Session.get('picStash').slice(0);
+      }
+      numFriends = friends.length;
+      row = Math.floor(i / dimension);
+      column = i - dimension * row;
+      top = row * unitSizePx;
+      left = column * unitSizePx;
+      style = '';
+      style += 'position:absolute;';
+      style += 'z-index:2;';
+      style += 'opacity:0.3;';
+      style += 'width:' + unitSizePx + 'px;';
+      style += 'height:' + unitSizePx + 'px;';
+      style += 'top:' + top + 'px;';
+      style += 'left:' + left + 'px;';
+      index = Math.floor(Math.random() * numFriends);
+      output.push({src:friends.pop(index), style:style});
+    }
+    // return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
+    return output;
+  }
+  return [];
+};
+
+Template.mosaic.picStash = function () {
+  if (Session.get('picStash') && Session.get('picStash')[0]) {
+    makeCrappyMosaic(Session.get('picStash'));
+    return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
+  }
+  return 'hello';
+};
 
 Template.header.loggedIn = function() {
   var user = Session.get('singly_account');
@@ -42,6 +108,34 @@ Template.greeting.events({
 
   }
 });
+
+// window.initTestData = function () {
+//   var srcList = [];
+//   for (var i = 1; i <= 24; i++) {
+//     srcList.push('testdata/' + i + '.jpg');
+//   }
+//   buildImageHueList(srcList);
+//   console.log(imageLibrary);
+// };
+
+// var makeMosaic = function () {
+//   var tim = getImageArray('testdata/tim.jpg');
+//   var timPixels = pixelize(tim);
+//   var width = 160;
+//   var height = 160;
+//   var hsv;
+//   var thumbSrc;
+
+//   for (var i = 0; i < width; i++) {
+//     for (var j = 0; j < height; j++) {
+//       hsv = rgb2hsv(timPixels[i * width + j].red
+//             , timPixels[i * width + j].green
+//             , timPixels[i * width + j].blue);
+//       thumbSrc = findBestPic(hsv.h);
+
+//     }
+//   }
+// };
 
 // breaks main pic data into hues
 window.processMainPic = function(data) {

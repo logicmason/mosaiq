@@ -4,6 +4,7 @@
 
 <body>
 	{{> header}}
+  {{> mosaic}}
 </body>
 
 <template name="header">
@@ -13,6 +14,20 @@
 	{{#unless loggedIn}}
 		{{> greeting}}
 	{{/unless}}
+</template>
+
+<template name="mosaic">
+  <div class="mosaic" style="position:relative;">
+      <img src="{{ profilePic.src }}" style="{{ profilePic.style }}">
+      {{ picStash }}m
+      {{#each tiles}}
+        {{> tile}}
+      {{/each}}
+  </div>
+</template>
+
+<template name="tile">
+  <img src="{{ src }}" style="{{ style }}">
 </template>
 
 <template name="greeting">
