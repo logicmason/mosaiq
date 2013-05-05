@@ -25,7 +25,6 @@
 <template name="mosaic">
   <div class="mosaic" style="position:relative;">
       <img src="{{ profilePic.src }}" style="{{ profilePic.style }}">
-      {{ picStash }}
       {{#each tiles}}
         {{> tile}}
       {{/each}}
