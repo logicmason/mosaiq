@@ -11,8 +11,7 @@ var canvas = document.getElementById("canvas"),
 // Assumes a blob or url as input, a collection in which keys are hues, 
 // and values are arrays of images to load.
 var generatePortrait = function(image, collection) {
-  var imageCount = 777,
-      pixelSize = 10,
+  var pixelSize = 10,
       curHue, 
       curSquare, 
       chosenImage,
@@ -28,28 +27,27 @@ var generatePortrait = function(image, collection) {
       context.putImageData(chosenImage, x, y);
     };
   }; 
-
-  var averageHue = function(curSquare) {
-    var index,
-    count, red, blue, green;
-    for (var x = 0; x < curSquare.height; x++) {
-      for (var y = 0; y < curSquare.width; y++) {
-        index = (y * canvasWidth + x) * 4;
-        red   += curSquare[index]
-        green += curSquare[index]++
-        blue  += curSquare[index]++
-        count++;
-      }
-    }
-    red = Math.floor(red/count);
-    green = Math.floor(green/count);
-    blue = Math.floor(blue/count);
-
-    return rgb2hsv(red, green, blue)[h];
-    
-  };
 };
 
+var averageHue = function(curSquare) {
+  var index,
+  count, red, blue, green;
+  for (var x = 0; x < curSquare.height; x++) {
+    for (var y = 0; y < curSquare.width; y++) {
+      index = (y * canvasWidth + x) * 4;
+      red   += curSquare[index]
+      green += curSquare[index]++
+      blue  += curSquare[index]++
+      count++;
+    }
+  }
+  red = Math.floor(red/count);
+  green = Math.floor(green/count);
+  blue = Math.floor(blue/count);
+
+  return rgb2hsv(red, green, blue)[h];
+  
+};
 // Walks across the hue field and finds any stack.
 // At present, only grabs the top image of an array.
 // Should probably grab a random one.
