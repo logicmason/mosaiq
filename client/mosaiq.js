@@ -71,7 +71,7 @@ Template.mosaic.tiles = function () {
       style += 'top:' + top + 'px;';
       style += 'left:' + left + 'px;';
       index = Math.floor(Math.random() * numFriends);
-      output.push({src:friends.pop(index), style:style});
+      output.push({src:friends.splice(index, 1), style:style});
     }
     // return $('<img>').attr('src', Session.get('picStash')[0]).attr('src');
     return output;
