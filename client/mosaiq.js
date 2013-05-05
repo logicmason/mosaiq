@@ -5,8 +5,14 @@ Template.header.thing1 = function () {
 Template.greeting.events({
   'click .greeting' : function () {
     // template data, if any, is available in 'this'
-    if (typeof console !== 'undefined') {
-      alert("Are you afraid?");
-    }
+    var mypic = new Image();
+		mypic.src = 'pic.jpg';
+		var canvas = $('<canvas>');
+		var ctx = canvas[0].getContext('2d');
+		ctx.drawImage(mypic, 0, 0);
+		data = ctx.getImageData(0,0,50,50).data;
+		console.log(data);
   }
 });
+
+
