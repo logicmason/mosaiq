@@ -43,6 +43,7 @@ body {
 .login .button {
 	display: inline-block;
   font: 20px/40px bankGothicLight;
+  height: 40px;
   width: 200px;
   color: white;
   text-align: center;
@@ -63,9 +64,8 @@ a {
 
 .login .button:active {
 	opacity: 1;
-	height: 36px;
-	margin-top: 1px;
-	padding-top: 3px;
+	line-height: 44px;
+	vertical-align: bottom;
 }
 
 .mosaic {
