@@ -1,33 +1,3 @@
-<<<<<<< HEAD
-/**
- * Module dependencies.
- */
-
-// var express = require('express')
-//   , app = express()
-//   , server = require('http').createServer(app);
-
-// server.listen(3000);
-// console.log('Express server listening on port 3000');
-
-// // Config
-
-// app.use(express.favicon());
-// // app.use(express.logger('dev'));
-// app.use(express.bodyParser());
-// app.use(express.methodOverride());
-// app.use(cookieParser);
-// app.use(express.session({ secret: secret, store: store }));
-// app.use(app.router);
-// app.use(express.static(path.join(__dirname, 'public')));
-// if ('development' == app.get('env')) {
-//   app.use(express.errorHandler());
-// }
-
-// // Routes
-
-// app.get('/', );
-=======
 Meteor.startup(function () {
  // code to run on server at startup
 });
@@ -41,7 +11,7 @@ Meteor.methods({
 		var result = Meteor.http.post("https://api.singly.com/oauth/access_token", {
 			params: {
 				'client_id': "41a209b08b207c9c34f64e1332629e55",
-				'client_secret': "6d8e13ee9eafa2a8761aee09f127ea0c", 
+				'client_secret': "6d8e13ee9eafa2a8761aee09f127ea0c",
 				code: param.code
 			}
 		});
@@ -67,4 +37,3 @@ Meteor.methods({
 		}
 	}
 });
->>>>>>> 7099c9f9002c9047731c7da6b9d8d03b30dac7d8
