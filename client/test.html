@@ -41,9 +41,9 @@ var generatePortrait = function(image, collection) {
         count++;
       }
     }
-    red /= count;
-    green /= count;
-    blue /= count;
+    red = Math.floor(red/count);
+    green = Math.floor(green/count);
+    blue = Math.floor(blue/count);
 
     return rgb2hsv(red, green, blue)[h];
     
@@ -78,7 +78,7 @@ var getClosestImage = function(hue) {
 };
 
 
-function rgb2hsv () {
+rgb2hsv = function (r,g,b) {
     var rr, gg, bb,
         r = arguments[0] / 255,
         g = arguments[1] / 255,
